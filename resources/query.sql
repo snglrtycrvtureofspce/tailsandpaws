@@ -1,32 +1,29 @@
 CREATE DATABASE PetsDB;
-GO
 
 USE PetsDB;
-GO
 
 CREATE TABLE Services (
-   ServiceID INT IDENTITY(1,1) PRIMARY KEY,
-   ServicePrice DECIMAL(10,2) NOT NULL DEFAULT 0;
-   ServiceName NVARCHAR(100) NOT NULL
+ServiceID INT AUTO_INCREMENT PRIMARY KEY,
+ServicePrice DECIMAL(10,2) NOT NULL DEFAULT 0,
+ServiceName NVARCHAR(100) NOT NULL
 );
-GO
 
 CREATE TABLE Doctors (
-   DoctorID INT IDENTITY(1,1) PRIMARY KEY,
-   DoctorName NVARCHAR(100) NOT NULL
+DoctorID INT AUTO_INCREMENT PRIMARY KEY,
+DoctorName NVARCHAR(100) NOT NULL
 );
-GO
 
 CREATE TABLE Appointment (
-    AppointmentID INT PRIMARY KEY IDENTITY(1,1),
-    AppointmentFIO NVARCHAR(50) NOT NULL,
-    AppointmentEmail NVARCHAR(50) NOT NULL,
-    ServiceID INT FOREIGN KEY REFERENCES Services(ServiceID),
-    DoctorID INT FOREIGN KEY REFERENCES Doctors(DoctorID),
-    AppointmentDate DATE NOT NULL,
-    AppointmentTime TIME NOT NULL
+AppointmentID INT AUTO_INCREMENT PRIMARY KEY,
+AppointmentFIO NVARCHAR(50) NOT NULL,
+AppointmentEmail NVARCHAR(50) NOT NULL,
+ServiceID INT,
+DoctorID INT,
+AppointmentDate DATE NOT NULL,
+AppointmentTime TIME NOT NULL,
+FOREIGN KEY (ServiceID) REFERENCES Services(ServiceID),
+FOREIGN KEY (DoctorID) REFERENCES Doctors(DoctorID)
 );
-GO
 
 
 INSERT INTO Services (ServicePrice, ServiceName)
