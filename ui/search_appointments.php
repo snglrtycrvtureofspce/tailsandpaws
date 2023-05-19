@@ -34,42 +34,49 @@ if (isset($_GET['doctor_id'])) {
         echo "</tr>";
         echo "</thead>";
         echo "<tbody>";
-    
+
         while ($row = $result->fetch_assoc()) {
             echo "<tr>";
             echo "<td>" . $row["AppointmentID"] . "</td>";
-            
+
             // Получаем информацию о враче
             $doctorID = $row["DoctorID"];
             $doctorSql = "SELECT * FROM Doctors WHERE DoctorID = '$doctorID'";
             $doctorResult = $conn->query($doctorSql);
             $doctorRow = $doctorResult->fetch_assoc();
             $doctorName = $doctorRow["DoctorName"];
-            
+
             echo "<td>" . $doctorName . "</td>";
-    
+
             // Получаем информацию об услуге
             $serviceID = $row["ServiceID"];
             $serviceSql = "SELECT * FROM Services WHERE ServiceID = '$serviceID'";
             $serviceResult = $conn->query($serviceSql);
             $serviceRow = $serviceResult->fetch_assoc();
             $serviceName = $serviceRow["ServiceName"];
-    
+
             echo "<td>" . $serviceName . "</td>";
             echo "<td>" . $row["AppointmentDateTime"] . "</td>";
             echo "</tr>";
         }
-    
+
         echo "</tbody>";
         echo "</table>";
     } else {
         echo "<p>Нет результатов для выбранного врача.</p>";
     }
-    
+
+    if ($conn->query($sql) === TRUE) {
+        // Перенаправление пользователя после успешного добавления
+        header('Location: admin.php');
+        exit();
+    } else {
+        echo "Ошибка поиска записи: " . $conn->error;
+    }
+
     // Закрытие соединения с базой данных
     $conn->close();
 } else {
     echo "<p>Запрос поиска не отправлен.</p>";
-    }
-    
+}
 ?>

@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js" lang="zxx">
+<html class="no-js" lang="en">
 
 <head>
     <meta charset="utf-8">
@@ -8,9 +8,7 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- <link rel="manifest" href="site.webmanifest"> -->
     <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico">
-    <!-- Place favicon.ico in the root directory -->
 
     <!-- CSS here -->
     <link rel="stylesheet" href="css/bootstrap.min.css">
@@ -24,14 +22,11 @@
     <link rel="stylesheet" href="css/animate.css">
     <link rel="stylesheet" href="css/slicknav.css">
     <link rel="stylesheet" href="css/style.css">
-    <!-- <link rel="stylesheet" href="css/responsive.css"> -->
 </head>
 
 <body>
-    <!-- Add your HTML content here for the admin page -->
-
     <div class="container">
-        <h2>Управление БД</h2>
+        <h2>Администрирование БД</h2>
         <h3>Поиск по врачам</h3>
         <form action="search.php" method="GET">
             <label for="doctor">Выберите врача:</label>
@@ -155,6 +150,11 @@
                 // Закрытие соединения с базой данных
                 $conn->close();
                 ?>
+                <tr>
+                    <td colspan="4">
+                        <a href="add_service.php">Добавить</a>
+                    </td>
+                </tr>
             </tbody>
         </table>
         <h3>Список врачей</h3>
@@ -205,6 +205,11 @@
                 // Закрытие соединения с базой данных
                 $conn->close();
                 ?>
+                <tr>
+                    <td colspan="3">
+                        <a href="add_doctor.php">Добавить</a>
+                    </td>
+                </tr>
             </tbody>
         </table>
 
@@ -265,6 +270,12 @@
                 // Закрытие соединения с базой данных
                 $conn->close();
                 ?>
+                <tr>
+                    <td colspan="8">
+                        <a href="add_appointment.php">Добавить</a>
+                    </td>
+                </tr>
+
             </tbody>
         </table>
     </div>

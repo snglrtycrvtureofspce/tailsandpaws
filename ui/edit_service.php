@@ -1,9 +1,9 @@
 <?php
-// Check if the service ID is provided
+// Проверка на предоставление doctor id
 if (isset($_GET['id'])) {
     $serviceID = $_GET['id'];
 
-    // Database connection
+    // Подключение к базе данных
     $servername = 'localhost';
     $username = 'root';
     $password = 'mysql';
@@ -15,7 +15,7 @@ if (isset($_GET['id'])) {
         die("Connection failed: " . $conn->connect_error);
     }
 
-    // Fetch service data from the database
+    // Получение сведений об услуге из базы данных
     $sql = "SELECT * FROM Services WHERE ServiceID = $serviceID";
     $result = $conn->query($sql);
 
@@ -29,7 +29,7 @@ if (isset($_GET['id'])) {
         exit;
     }
 
-    // Close the database connection
+    // Закрытие соединения с базой данных
     $conn->close();
 } else {
     echo "Service ID not provided.";
@@ -38,18 +38,16 @@ if (isset($_GET['id'])) {
 ?>
 
 <!doctype html>
-<html class="no-js" lang="zxx">
+<html class="no-js" lang="en">
 
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Администратор - Зоомир</title>
+    <title>Редактирование услуги - Зоомир</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- <link rel="manifest" href="site.webmanifest"> -->
     <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico">
-    <!-- Place favicon.ico in the root directory -->
 
     <!-- CSS here -->
     <link rel="stylesheet" href="css/bootstrap.min.css">
@@ -63,24 +61,24 @@ if (isset($_GET['id'])) {
     <link rel="stylesheet" href="css/animate.css">
     <link rel="stylesheet" href="css/slicknav.css">
     <link rel="stylesheet" href="css/style.css">
-    <!-- <link rel="stylesheet" href="css/responsive.css"> -->
 </head>
 
 <body>
-    <!-- Add your HTML content here for the edit service page -->
     <div class="container">
-        <h2>Edit Service</h2>
+        <h2>Редактирование услуги</h2>
         <form action="update_service.php" method="POST">
             <input type="hidden" name="serviceID" value="<?php echo $serviceID; ?>">
             <div class="form-group">
-                <label for="servicePrice">Service Price:</label>
+                <label for="servicePrice">Цена услуги:</label>
                 <input type="text" class="form-control" id="servicePrice" name="servicePrice" value="<?php echo $servicePrice; ?>">
             </div>
             <div class="form-group">
-                <label for="serviceName">Service Name:</label>
+                <label for="serviceName">Наименование услуги:</label>
                 <input type="text" class="form-control" id="serviceName" name="serviceName" value="<?php echo $serviceName; ?>">
             </div>
-            <button type="submit" class="btn btn-primary">Update</button>
+            <?php
+            echo '<button href="admin.php" type="submit" class="btn btn-primary">Сохранить</button>';
+            ?>
         </form>
     </div>
     <!-- jQuery -->

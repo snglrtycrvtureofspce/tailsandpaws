@@ -1,9 +1,9 @@
 <?php
-// Check if the service ID is provided
+// Проверка на предоставление service id
 if (isset($_GET['id'])) {
     $serviceID = $_GET['id'];
 
-    // Database connection
+    // Подключение к базе данных
     $servername = 'localhost';
     $username = 'root';
     $password = 'mysql';
@@ -12,20 +12,22 @@ if (isset($_GET['id'])) {
     $conn = new mysqli($servername, $username, $password, $dbname);
 
     if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
+        die("Ошибка подключения: " . $conn->connect_error);
     }
 
-    // Delete the service record from the database
+    // Запрос на удаление услуги с базы данных
     $sql = "DELETE FROM Services WHERE ServiceID = $serviceID";
     if ($conn->query($sql) === TRUE) {
-        echo "Service deleted successfully.";
+        // Перенаправление пользователя после успешного добавления
+        header('Location: admin.php');
+        exit();
     } else {
-        echo "Error deleting service: " . $conn->error;
+        echo "Ошибка удаления услуги: " . $conn->error;
     }
-    
-    // Close the database connection
+
+    // Закрытие соединения с базой данных
     $conn->close();
 } else {
-    echo "Invalid request.";
-    }
-?>    
+    echo "Неверный запрос.";
+}
+?>

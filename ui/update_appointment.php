@@ -1,7 +1,6 @@
 <?php
-// Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Retrieve form data
+    // Получение из базы данных
     $appointmentID = $_POST["appointmentID"];
     $appointmentFIO = $_POST["appointmentFIO"];
     $appointmentEmail = $_POST["appointmentEmail"];
@@ -10,7 +9,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $appointmentDate = $_POST["appointmentDate"];
     $appointmentTime = $_POST["appointmentTime"];
 
-    // Database connection
+    // Подключение к базе данных
     $servername = 'localhost';
     $username = 'root';
     $password = 'mysql';
@@ -19,21 +18,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $conn = new mysqli($servername, $username, $password, $dbname);
 
     if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
+        die("Ошибка подключения: " . $conn->connect_error);
     }
 
-    // Update the appointment record in the database
+    // Обновление записи в базе данных
     $sql = "UPDATE Appointment SET AppointmentFIO = '$appointmentFIO', AppointmentEmail = '$appointmentEmail', ServiceID = $serviceID, DoctorID = $doctorID, AppointmentDate = '$appointmentDate', AppointmentTime = '$appointmentTime' WHERE AppointmentID = $appointmentID";
 
     if ($conn->query($sql) === TRUE) {
-        echo "Appointment updated successfully.";
+        // Перенаправление пользователя после успешного добавления
+        header('Location: admin.php');
+        exit();
     } else {
-        echo "Error updating appointment: " . $conn->error;
+        echo "Ошибка обновления записи: " . $conn->error;
     }
 
-    // Close the database connection
+    // Закрытие соединения с базой данных
     $conn->close();
 } else {
-    echo "Invalid request.";
+    echo "Неверный запрос.";
 }
 ?>

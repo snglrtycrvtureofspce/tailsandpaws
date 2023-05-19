@@ -1,9 +1,9 @@
 <?php
-// Check if the doctor ID is provided
+// Проверка на предоставление doctor id
 if (isset($_GET['id'])) {
     $doctorID = $_GET['id'];
 
-    // Database connection
+    // Подключение к базе данных
     $servername = 'localhost';
     $username = 'root';
     $password = 'mysql';
@@ -11,20 +11,22 @@ if (isset($_GET['id'])) {
 
     $conn = new mysqli($servername, $username, $password, $dbname);
     if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-        }
-        // Delete the doctor record from the database
-$sql = "DELETE FROM Doctors WHERE DoctorID = $doctorID";
-
-if ($conn->query($sql) === TRUE) {
-    echo "Doctor deleted successfully.";
-} else {
-    echo "Error deleting doctor: " . $conn->error;
-}
-
-// Close the database connection
-$conn->close();
-} else {
-    echo "Invalid request.";
+        die("Ошибка подключения: " . $conn->connect_error);
     }
-    ?>
+
+    // Запрос на удаление врача с базы данных
+    $sql = "DELETE FROM Doctors WHERE DoctorID = $doctorID";
+
+    if ($conn->query($sql) === TRUE) {
+        header('Location: admin.php');
+        exit();
+    } else {
+        echo "Ошибка удаления врача: " . $conn->error;
+    }
+
+    // Закрытие соединения с базой данных
+    $conn->close();
+} else {
+    echo "Неверный запрос.";
+}
+?>

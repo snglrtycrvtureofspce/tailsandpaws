@@ -1,9 +1,9 @@
 <?php
-// Check if the doctor ID is provided
+// Проверка на предоставление doctor id
 if (isset($_GET['id'])) {
     $doctorID = $_GET['id'];
 
-    // Database connection
+    // Подключение к базе данных
     $servername = 'localhost';
     $username = 'root';
     $password = 'mysql';
@@ -12,10 +12,10 @@ if (isset($_GET['id'])) {
     $conn = new mysqli($servername, $username, $password, $dbname);
 
     if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
+        die("Ошибка подключения: " . $conn->connect_error);
     }
 
-    // Fetch the doctor record from the database
+    // Получение сведений о враче из базы данных
     $sql = "SELECT * FROM Doctors WHERE DoctorID = $doctorID";
     $result = $conn->query($sql);
 
@@ -23,33 +23,30 @@ if (isset($_GET['id'])) {
         $row = $result->fetch_assoc();
         $doctorName = $row['DoctorName'];
     } else {
-        echo "Doctor not found.";
+        echo "Врач не найден.";
         exit;
     }
 
-    // Close the database connection
+    // Закрытие соединения с базой данных
     $conn->close();
 } else {
-    echo "Invalid request.";
+    echo "Неверный запрос.";
     exit;
 }
 ?>
 
 <!doctype html>
-<html class="no-js" lang="zxx">
+<html class="no-js" lang="en">
 
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Редактировать врача - Зоомир</title>
+    <title>Редактирование врача - Зоомир</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- <link rel="manifest" href="site.webmanifest"> -->
     <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico">
-    <!-- Place favicon.ico in the root directory -->
 
-    <!-- CSS here -->
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/owl.carousel.min.css">
     <link rel="stylesheet" href="css/magnific-popup.css">
@@ -61,24 +58,23 @@ if (isset($_GET['id'])) {
     <link rel="stylesheet" href="css/animate.css">
     <link rel="stylesheet" href="css/slicknav.css">
     <link rel="stylesheet" href="css/style.css">
-    <!-- <link rel="stylesheet" href="css/responsive.css"> -->
 </head>
 
 <body>
-    <!-- Add your HTML content here for the edit doctor page -->
-
     <div class="container">
         <h2>Редактировать врача</h2>
         <form method="post" action="update_doctor.php">
             <div class="form-group">
-                <label for="doctorID">Doctor ID:</label>
+                <label for="doctorID">ID врача:</label>
                 <input type="text" class="form-control" id="doctorID" name="doctorID" value="<?php echo $doctorID; ?>" readonly>
             </div>
             <div class="form-group">
-                <label for="doctorName">Doctor Name:</label>
+                <label for="doctorName">ФИО врача:</label>
                 <input type="text" class="form-control" id="doctorName" name="doctorName" value="<?php echo $doctorName; ?>" required>
             </div>
-            <button type="submit" class="btn btn-primary">Save</button>
+            <?php
+            echo '<button href="admin.php" type="submit" class="btn btn-primary">Сохранить</button>';
+            ?>
         </form>
     </div>
 

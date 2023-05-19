@@ -1,17 +1,14 @@
 <!doctype html>
-<html class="no-js" lang="zxx">
+<html class="no-js" lang="en">
 
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Edit Appointment - Зоомир</title>
+    <title>Редактирование записи - Зоомир</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- <link rel="manifest" href="site.webmanifest"> -->
     <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico">
-    <!-- Place favicon.ico in the root directory -->
-
     <!-- CSS here -->
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/owl.carousel.min.css">
@@ -24,20 +21,18 @@
     <link rel="stylesheet" href="css/animate.css">
     <link rel="stylesheet" href="css/slicknav.css">
     <link rel="stylesheet" href="css/style.css">
-    <!-- <link rel="stylesheet" href="css/responsive.css"> -->
 </head>
 
 <body>
-    <!-- Add your HTML content here for the edit appointment page -->
     <div class="container">
-        <h2>Edit Appointment</h2>
+        <h2>Редактирование записи</h2>
 
         <?php
-        // Check if the appointment ID is provided
+        // Проверка на предоставление appointment id
         if (isset($_GET['id'])) {
             $appointmentID = $_GET['id'];
 
-            // Database connection
+            // Подключение к базе данных
             $servername = 'localhost';
             $username = 'root';
             $password = 'mysql';
@@ -46,10 +41,10 @@
             $conn = new mysqli($servername, $username, $password, $dbname);
 
             if ($conn->connect_error) {
-                die("Connection failed: " . $conn->connect_error);
+                die("Ошибка подключения: " . $conn->connect_error);
             }
 
-            // Retrieve the appointment details from the database
+            // Получение сведений о записи из базы данных
             $sql = "SELECT * FROM Appointment WHERE AppointmentID = $appointmentID";
             $result = $conn->query($sql);
 
@@ -66,7 +61,7 @@
                 <form method="POST" action="update_appointment.php">
                     <input type="hidden" name="appointmentID" value="<?php echo $appointmentID; ?>">
                     <div class="form-group">
-                        <label for="appointmentFIO">Full Name:</label>
+                        <label for="appointmentFIO">ФИО:</label>
                         <input type="text" class="form-control" id="appointmentFIO" name="appointmentFIO" value="<?php echo $appointmentFIO; ?>" required>
                     </div>
                     <div class="form-group">
@@ -74,10 +69,9 @@
                         <input type="email" class="form-control" id="appointmentEmail" name="appointmentEmail" value="<?php echo $appointmentEmail; ?>" required>
                     </div>
                     <div class="form-group">
-                        <label for="serviceID">Service:</label>
+                        <label for="serviceID">Услуга:</label>
                         <select class="form-control" id="serviceID" name="serviceID" required>
                             <?php
-                            // Retrieve the services from the database
                             $sql = "SELECT * FROM Services";
                             $result = $conn->query($sql);
                             if ($result->num_rows > 0) {
@@ -90,10 +84,9 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="doctorID">Doctor:</label>
+                        <label for="doctorID">Врач:</label>
                         <select class="form-control" id="doctorID" name="doctorID" required>
                             <?php
-                            // Retrieve the doctors from the database
                             $sql = "SELECT * FROM Doctors";
                             $result = $conn->query($sql);
 
@@ -107,25 +100,27 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="appointmentDate">Date:</label>
+                        <label for="appointmentDate">Дата:</label>
                         <input type="date" class="form-control" id="appointmentDate" name="appointmentDate" value="<?php echo $appointmentDate; ?>" required>
                     </div>
                     <div class="form-group">
-                        <label for="appointmentTime">Time:</label>
+                        <label for="appointmentTime">Время:</label>
                         <input type="time" class="form-control" id="appointmentTime" name="appointmentTime" value="<?php echo $appointmentTime; ?>" required>
                     </div>
-                    <button type="submit" class="btn btn-primary">Save</button>
+                    <?php
+                    echo '<button href="admin.php" type="submit" class="btn btn-primary">Сохранить</button>';
+                    ?>
                 </form>
 
         <?php
             } else {
-                echo "Appointment not found.";
+                echo "Услуга не найдена.";
             }
 
-            // Close the database connection
+            // Закрытие соединения с базой данных
             $conn->close();
         } else {
-            echo "Invalid request.";
+            echo "Неверный запрос.";
         }
         ?>
 
@@ -144,22 +139,21 @@
     <!-- Waypoints js -->
     <script src="js/waypoints.min.js"></script>
     <!-- Countdown js -->
-    <scriptsrc="js /jquery.countdown.min.js">
-        </scriptsrc=>
-        <!-- Isotope js -->
-        <script src="js/isotope.pkgd.min.js"></script>
-        <!-- Meanmenu js -->
-        <script src="js/jquery.meanmenu.js"></script>
-        <!-- Nice Select js -->
-        <script src="js/jquery.nice-select.min.js"></script>
-        <!-- ScrollUp js -->
-        <script src="js/jquery.scrollUp.min.js"></script>
-        <!-- Slicknav js -->
-        <script src="js/jquery.slicknav.min.js"></script>
-        <!-- Magnific Popup js -->
-        <script src="js/magnific-popup.min.js"></script>
-        <!-- Active js -->
-        <script src="js/active.js"></script>
+    <script src="js/jquery.countdown.min.js"></script>
+    <!-- Isotope js -->
+    <script src="js/isotope.pkgd.min.js"></script>
+    <!-- Meanmenu js -->
+    <script src="js/jquery.meanmenu.js"></script>
+    <!-- Nice Select js -->
+    <script src="js/jquery.nice-select.min.js"></script>
+    <!-- ScrollUp js -->
+    <script src="js/jquery.scrollUp.min.js"></script>
+    <!-- Slicknav js -->
+    <script src="js/jquery.slicknav.min.js"></script>
+    <!-- Magnific Popup js -->
+    <script src="js/magnific-popup.min.js"></script>
+    <!-- Active js -->
+    <script src="js/active.js"></script>
 </body>
 
 </html>

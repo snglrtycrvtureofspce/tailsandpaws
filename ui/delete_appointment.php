@@ -1,9 +1,9 @@
 <?php
-// Check if the appointment ID is provided
+// Проверка на предоставление appointment id
 if (isset($_GET['id'])) {
     $appointmentID = $_GET['id'];
 
-    // Database connection
+    // Подключение к базе данных
     $servername = 'localhost';
     $username = 'root';
     $password = 'mysql';
@@ -12,21 +12,22 @@ if (isset($_GET['id'])) {
     $conn = new mysqli($servername, $username, $password, $dbname);
 
     if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
+        die("Ошибка подключения: " . $conn->connect_error);
     }
 
-    // Delete the appointment record from the database
+    // Запрос на удаление записи  с базы данных
     $sql = "DELETE FROM Appointment WHERE AppointmentID = $appointmentID";
 
     if ($conn->query($sql) === TRUE) {
-        echo "Appointment deleted successfully.";
+        header('Location: admin.php');
+        exit();
     } else {
-        echo "Error deleting appointment: " . $conn->error;
+        echo "Ошибка удаления записи: " . $conn->error;
     }
 
-    // Close the database connection
+    // Закрытие соединения с базой данных
     $conn->close();
 } else {
-    echo "Invalid request.";
+    echo "Неверный запрос.";
 }
 ?>

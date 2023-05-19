@@ -72,7 +72,7 @@
 
     .banner::after {
       content: "";
-      background-color: rgba(255, 78, 25, 0.973);
+      background-color: rgba(238, 130, 238);
       position: absolute;
       width: 100%;
       height: 100%;
@@ -134,6 +134,20 @@
       position: absolute;
       font-size: 20px;
       color: #00b33c;
+    }
+
+    button[type="submit"] {
+
+      padding: 10px;
+      background-color: #ff7fca;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #ff7fca;
     }
 
     .item i {
@@ -344,7 +358,7 @@
   }
   ?>
   <div class="testbox">
-    <form method="POST" action="zapiz.php">
+    <form method="POST" action="zapiz.php" onsubmit="return validateForm()">
       <div class="banner">
         <h1>Запись на услугу</h1>
       </div>
@@ -357,11 +371,12 @@
         </div>
         <div class="item">
           <label for="email">E-mail<span>*</span></label>
-          <input id="email" type="text" name="email" />
+          <input type="email" id="email" name="email" placeholder="example@example.com" required>
         </div>
         <div class="item">
           <p>Выбор услуги</p>
-          <select name="service">
+          <select name="service" id="service" onchange="updateServicePrice()">
+            <option value="">Не выбрано</option>
             <?php
             // Подключение к базе данных
             $servername = 'localhost'; // Имя сервера базы данных
@@ -377,7 +392,7 @@
             }
 
             // Получение списка услуг из базы данных
-            $sql = "SELECT ServiceID, ServiceName FROM Services";
+            $sql = "SELECT ServiceID, ServiceName, ServicePrice FROM Services";
             $result = $conn->query($sql);
 
             if ($result->num_rows > 0) {
@@ -389,10 +404,12 @@
             $conn->close();
             ?>
           </select>
+          <p>Цена: <span id="servicePrice">0,00</span> руб.</p>
         </div>
         <div class="item">
           <p>Выбор врача</p>
-          <select name="doctor">
+          <select name="doctor" id="doctor">
+            <option value="">Не выбрано</option>
             <?php
             // Подключение к базе данных
             $conn = new mysqli($servername, $username, $password, $dbname);
@@ -430,5 +447,71 @@
       </div>
     </form>
 </body>
+<script>
+  function updateServicePrice() {
+    // Получаем выбранную услугу
+    var serviceSelect = document.getElementById("service");
+    var selectedService = serviceSelect.options[serviceSelect.selectedIndex];
+
+    // Получаем идентификатор выбранной услуги
+    var serviceId = selectedService.value;
+
+    // Выполняем AJAX-запрос для получения цены услуги из базы данных
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        // Обновляем поле с ценой на форме
+        document.getElementById("servicePrice").textContent = this.responseText;
+      }
+    };
+    xhttp.open("GET", "get_price.php?serviceId=" + serviceId, true);
+    xhttp.send();
+  }
+
+  function validateEmail(email) {
+    // Регулярное выражение для проверки email
+    var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailPattern.test(email);
+  }
+
+  function validateForm() {
+    var service = document.getElementById("service").value;
+    var doctor = document.getElementById("doctor").value;
+    var fname = document.getElementById("fname").value;
+    var emailInput = document.getElementById("email");
+    var email = emailInput.value.trim();
+
+    if (service === "") {
+      alert("Пожалуйста, выберите услугу");
+      return false; // Отмена отправки формы
+    }
+
+    if (doctor === "") {
+      alert("Пожалуйста, выберите врача");
+      return false; // Отмена отправки формы
+    }
+
+    if (fname === "") {
+      alert("Пожалуйста, введите ФИО.");
+      return false; // Отмена отправки формы
+    }
+
+    // Проверка на пустое поле email
+    if (email === "") {
+      alert("Пожалуйста, введите email.");
+      emailInput.focus();
+      return false;
+    }
+
+    // Проверка на корректность email
+    if (!validateEmail(email)) {
+      alert("Пожалуйста, введите корректный email. Пример: example@example.com");
+      emailInput.focus();
+      return false;
+    }
+
+    return true; // Разрешение отправки формы
+  }
+</script>
 
 </html>

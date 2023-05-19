@@ -1,11 +1,10 @@
 <?php
-// Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Retrieve form data
+    // Получение из базы данных
     $doctorID = $_POST["doctorID"];
     $doctorName = $_POST["doctorName"];
 
-    // Database connection
+    // Подключение к базе данных
     $servername = 'localhost';
     $username = 'root';
     $password = 'mysql';
@@ -17,18 +16,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         die("Connection failed: " . $conn->connect_error);
     }
 
-    // Update the doctor record in the database
+    // Обновление врача в базе данных
     $sql = "UPDATE Doctors SET DoctorName = '$doctorName' WHERE DoctorID = $doctorID";
 
     if ($conn->query($sql) === TRUE) {
-        echo "Doctor updated successfully.";
+        // Перенаправление пользователя после успешного добавления
+        header('Location: admin.php');
+        exit();
     } else {
-        echo "Error updating doctor: " . $conn->error;
+        echo "Ошибка обновления врача: " . $conn->error;
     }
 
-    // Close the database connection
+    // Закрытие соединения с базой данных
     $conn->close();
 } else {
-    echo "Invalid request.";
+    echo "Неверный запрос";
 }
 ?>
