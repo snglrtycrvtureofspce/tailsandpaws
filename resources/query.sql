@@ -54,3 +54,21 @@ VALUES
 INSERT INTO Appointment (AppointmentFIO, AppointmentEmail, ServiceID, DoctorID, AppointmentDate, AppointmentTime)
 VALUES 
 ('Шалькевич Елизавета Вадимовна', 'coiriel1@gmail.com', 1, 1, '2023-05-15', '12:00:00');
+
+/* нельзя было записаться к одному и тому же врачу на одно и тоже время и дату */
+ALTER TABLE Appointment
+ADD CONSTRAINT UC_DoctorAppointment UNIQUE (DoctorID, AppointmentDate, AppointmentTime);
+
+/* ограничение записи на дату и время которая уже прошла */
+DELIMITER //
+
+CREATE TRIGGER CheckAppointmentDateTime
+BEFORE INSERT ON Appointment
+FOR EACH ROW
+BEGIN
+  IF NEW.AppointmentDate < CURDATE() OR (NEW.AppointmentDate = CURDATE() AND NEW.AppointmentTime < CURTIME()) THEN
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Невозможно записаться на прошедшую дату и время';
+  END IF;
+END //
+
+DELIMITER ;

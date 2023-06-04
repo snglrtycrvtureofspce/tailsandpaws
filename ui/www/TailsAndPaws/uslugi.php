@@ -25,6 +25,29 @@
    <link rel="stylesheet" href="css/slicknav.css">
    <link rel="stylesheet" href="css/style.css">
    <!-- <link rel="stylesheet" href="css/responsive.css"> -->
+
+   <style>
+        
+        table {
+            border-collapse: collapse;
+            margin: 0 auto;
+            font-size: 24px;
+            background-color: transparent;
+        }
+        
+        td {
+            padding: 18px;
+            text-align: left;
+            margin: 0 auto;
+        }
+        
+        th {
+            background-color: transparent;
+            padding: 18px;
+            text-align: left;
+            margin: 0 auto;
+        }
+    </style>
 </head>
 
 <body>
@@ -48,17 +71,12 @@
                       </div>
                       <div class="col-lg-6 col-md-4 ">
                           <div class="social_media_links">
-                              <a href="#">
+                          <a href="https://facebook.com/liza.tyan.3">
                                   <i class="fa fa-facebook"></i>
                               </a>
-                              <a href="#">
-                                  <i class="fa fa-pinterest-p"></i>
                               </a>
-                              <a href="#">
-                                  <i class="fa fa-google-plus"></i>
-                              </a>
-                              <a href="#">
-                                  <i class="fa fa-linkedin"></i>
+                              <a href="https://www.instagram.com/tailsandpawsclinic/">
+                                  <i class="fa fa-instagram"></i>
                               </a>
                           </div>
                       </div>
@@ -83,7 +101,7 @@
                                     <li><a href="about.html">О нас </a></li>
                                     <li><a href="contact.html">Контакты</a></li>
                                     <li><a href="zapiz.php">Запись на прием</a></li>
-                                    <li><a href="uslugi.html">Услуги</a></li>
+                                    <li><a href="uslugi.php">Услуги</a></li>
                                   </ul>
                               </nav>
                           </div>
@@ -115,12 +133,121 @@
    <!--================Blog Area =================-->
    <section class="blog_area single-post-area section-padding">
       <div class="container">
+      <h3>Поиск по врачам</h3>
+        <form action="search_copy.php" method="GET">
+            <label for="doctor">Выберите врача:</label>
+            <select name="doctor" id="doctor">
+                <?php
+                // Подключение к базе данных
+                $servername = 'localhost';
+                $username = 'root';
+                $password = 'mysql';
+                $dbname = 'petsdb';
+
+                $conn = new mysqli($servername, $username, $password, $dbname);
+
+                // Проверка подключения
+                if ($conn->connect_error) {
+                    die("Ошибка подключения: " . $conn->connect_error);
+                }
+
+                // Запрос для получения списка врачей
+                $sql = "SELECT * FROM Doctors";
+                $result = $conn->query($sql);
+
+                // Вывод списка врачей в выпадающий список
+                if ($result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()) {
+                        echo "<option value='" . $row["DoctorID"] . "'>" . $row["DoctorName"] . "</option>";
+                    }
+                } else {
+                    echo "<option value=''>Нет доступных врачей</option>";
+                }
+
+                // Закрытие соединения с базой данных
+                $conn->close();
+                ?>
+            </select>
+            <button type="submit">Найти</button>
+        </form>
+        <h3>Поиск по услугам</h3>
+        <form action="search_service_copy.php" method="GET">
+            <label for="service">Выберите услугу:</label>
+            <select name="service" id="service">
+                <?php
+                // Подключение к базе данных
+                $servername = 'localhost';
+                $username = 'root';
+                $password = 'mysql';
+                $dbname = 'petsdb';
+
+                $conn = new mysqli($servername, $username, $password, $dbname);
+
+                // Проверка подключения
+                if ($conn->connect_error) {
+                    die("Ошибка подключения: " . $conn->connect_error);
+                }
+
+                // Запрос для получения списка услуг
+                $sql = "SELECT * FROM Services";
+                $result = $conn->query($sql);
+
+                // Вывод списка услуг в выпадающий список
+                if ($result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()) {
+                        echo "<option value='" . $row["ServiceID"] . "'>" . $row["ServiceName"] . "</option>";
+                    }
+                } else {
+                    echo "<option value=''>Нет доступных услуг</option>";
+                }
+                // Закрытие соединения с базой данных
+                $conn->close();
+                ?>
+            </select>
+            <button type="submit">Найти</button>
+        </form>
          <div class="row">
             <div class="col-lg-8 posts-list">
                <div class="single-post">
                   <div class="section_title">
-                        <img src="img//1.png" alt="">
-                        <img src="img//3.png" alt="">
+                    <?php
+                    // Подключение к базе данных и выполнение запроса
+                    $servername = 'localhost'; // Имя сервера базы данных
+                    $username = 'root'; // Имя пользователя базы данных
+                    $password = 'mysql'; // Пароль базы данных
+                    $dbname = 'petsdb'; // Имя базы данных
+                
+                    $conn = new mysqli($servername, $username, $password, $dbname);
+                    if ($conn->connect_error) {
+                        die("Ошибка подключения: " . $conn->connect_error);
+                    }
+                
+                    $sql = "SELECT ServicePrice, ServiceName FROM Services";
+                    $result = $conn->query($sql);
+                
+                    if ($result->num_rows > 0) {
+                        echo "<table>";
+                        // Вывод заголовков
+                        echo "<tr>
+                                <th>Услуга</th>
+                                <th>Цена</th>
+                            </tr>";
+                
+                        // Вывод данных
+                        while ($row = $result->fetch_assoc()) {
+                            echo "<tr>
+                                    <td>".$row["ServiceName"]."</td>
+                                    <td>".$row["ServicePrice"]."</td>
+                                  </tr>";
+                        }
+                        echo "</table>";
+                    } else {
+                        echo "Нет данных для отображения.";
+                    }
+                    $conn->close();
+                    ?>
+                    
+                    </section>
 
 
                   </aside>
@@ -177,25 +304,17 @@
                           <div class="socail_links">
                               <ul>
                                   <li>
-                                      <a href="#">
+                                  <a href="https://facebook.com/liza.tyan.3">
                                           <i class="ti-facebook"></i>
                                       </a>
                                   </li>
+
                                   <li>
-                                      <a href="#">
-                                          <i class="ti-pinterest"></i>
+                                      <a href="https://www.instagram.com/tailsandpawsclinic/">
+                                          <i class="fa fa-instagram"></i>
                                       </a>
                                   </li>
-                                  <li>
-                                      <a href="#">
-                                          <i class="fa fa-google-plus"></i>
-                                      </a>
-                                  </li>
-                                  <li>
-                                      <a href="#">
-                                          <i class="fa fa-linkedin"></i>
-                                      </a>
-                                  </li>
+
                               </ul>
                           </div>
 
@@ -204,16 +323,7 @@
               </div>
           </div>
       </div>
-      <div class="copy-right_text">
-          <div class="container">
-              <div class="bordered_1px"></div>
-              <div class="row">
-                  <div class="col-xl-12">
-                      <p class="copy_right text-center">
-                          <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-  Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="ti-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-  <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
-                      </p>
+
                   </div>
               </div>
           </div>
